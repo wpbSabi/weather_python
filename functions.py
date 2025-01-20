@@ -1,3 +1,4 @@
+import folium
 import pandas as pd
 
 
@@ -62,3 +63,36 @@ def view_station_date_ranges(df: pd.DataFrame) -> pd.DataFrame:
         .reset_index(drop=True)
     )
     return return_df
+
+
+def map_stations(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Maps the stations on a folium map
+
+    Args:
+        df (data frame) - geospatial data by station, such as latitude
+
+    Returns:
+        m (folium.Map) - displays the results_df on a folium map
+    """
+    # Create the folium map and center on the default location
+    m = folium.Map(
+        [46.082, -123.187],
+        zoom_start=11,
+    )
+
+    # Add darkgreen circles for destinations
+    for j in range(len(df)):
+        folium.CircleMarker(
+            location=[df.iloc[j]["LATITUDE"], df.iloc[j]["LONGITUDE"]],
+            tooltip=df.iloc[j][["STATION", "ELEVATION"]],
+            color="darkblue",
+            fill=True,
+            fill_opacity=0.7,
+            radius=8,
+        ).add_to(m)
+
+    folium.TileLayer("OpenTopoMap").add_to(m)
+    folium.TileLayer("OpenStreetMap").add_to(m)
+    folium.LayerControl().add_to(m)
+    return m
