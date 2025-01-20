@@ -32,7 +32,7 @@ def update_data(
 
     # Overwrite the existing data
     if overwrite == "yes":
-        combined.to_csv(existing, index=False)
+        combined.to_csv(existing_data_path, index=False)
 
     return combined
 
