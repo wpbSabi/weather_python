@@ -65,7 +65,7 @@ def view_station_date_ranges(df: pd.DataFrame) -> pd.DataFrame:
     return return_df
 
 
-def map_stations(df: pd.DataFrame) -> pd.DataFrame:
+def map_stations(df: pd.DataFrame) -> folium.map:
     """
     Maps the stations on a folium map
 
@@ -96,3 +96,35 @@ def map_stations(df: pd.DataFrame) -> pd.DataFrame:
     folium.TileLayer("OpenStreetMap").add_to(m)
     folium.LayerControl().add_to(m)
     return m
+
+
+def plot_temp_compare(df: pd.DataFrame, metric: str, year: int):
+    """
+    Plots of the temperature for two locations, on a lineplot, for a year
+
+    Args:
+        df (data frame) - weather data
+        metric (string) - choose a metric in the weather data: TMAX, TMIN, or TAVG
+        year (integer) - filter on a year, for the
+
+    Returns:
+        p (figure) - plot of the temperature comparison for a year
+    """
+    # Stack the metric of the locations; make the wide data long
+    x = pd.melt(
+        df[df["year"] == year],
+        id_vars="DATE",
+        value_vars=list(df.columns[df.columns.str.contains(metric)]),
+    )
+    x["DATE"] = pd.to_datetime(x["DATE"])
+    ax = sns.set(rc={"figure.figsize": (30, 20)})
+    p = sns.lineplot(x, x="DATE", y="value", hue="variable", linewidth=4)
+    ax = p.tick_params(axis="x", labelsize=20)
+    ax = p.tick_params(axis="y", labelsize=20)
+    ax = p.set_xlabel("\n Months \n", fontsize=20, rotation=0)
+    ax = p.set_ylabel("\n Temparature (F) \n", fontsize=20, rotation=90)
+    ax = p.set_title("\nTemperature Comparison %s\n" % year, fontsize=30)
+    ax = plt.xticks(rotation=90)
+    ax = plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
+    ax = plt.legend(fontsize=20)
+    return plt
