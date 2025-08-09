@@ -68,20 +68,29 @@ def view_station_date_ranges(df: pd.DataFrame) -> pd.DataFrame:
     return return_df
 
 
-def map_stations(df: pd.DataFrame) -> folium.map:
+def map_stations(
+    df: pd.DataFrame,
+    default_lat: float = 45.9,
+    default_long: float = -122.3,
+    default_zoom: float = 9,
+) -> folium.map:
     """
     Maps the stations on a folium map
 
     Args:
         df (data frame) - geospatial data by station, such as latitude
+        default_lat (float) - the latitude that the map starts at
+        default_long (float) - the longitude that the map starts at
+        default_zoom (float) - the zoom that the map starts at
 
     Returns:
         m (folium.Map) - displays the results_df on a folium map
     """
+
     # Create the folium map and center on the default location
     m = folium.Map(
-        [46.082, -123.187],
-        zoom_start=11,
+        [default_lat, default_long],
+        zoom_start=default_zoom,
     )
 
     # Add darkgreen circles for destinations
