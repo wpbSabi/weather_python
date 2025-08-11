@@ -38,7 +38,7 @@ Gardening is the inspiration for this repo.  I'm planning to move my garden more
 
 ## Highlights
 
-# Temperature
+### Temperature
 
 The USDA Plant Hardiness Zones are calculated using minimum annual temperatures over a 30 year period, averaged.  You may explore and download maps created with that data from 2023 at [planthardiness.ars.usda.gov/](https://planthardiness.ars.usda.gov/).  
 

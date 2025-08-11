@@ -1,6 +1,7 @@
 import folium
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
@@ -117,7 +118,7 @@ def plot_temp_compare(df: pd.DataFrame, metric: str, year: int):
     Args:
         df (data frame) - weather data
         metric (string) - choose a metric in the weather data: TMAX, TMIN, or TAVG
-        year (integer) - filter on a year, for the
+        year (integer) - filter on a year
 
     Returns:
         p (figure) - plot of the temperature comparison for a year
@@ -139,4 +140,51 @@ def plot_temp_compare(df: pd.DataFrame, metric: str, year: int):
     ax = plt.xticks(rotation=90)
     ax = plt.gca().xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
     ax = plt.legend(fontsize=20)
-    return plt
+    return p
+
+
+def plot_monthly_temp_plots(
+    df: pd.DataFrame, metric: str, ylim_low: int = -20, ylim_high: int = 120
+):
+    """
+    Plots of the temperature for two locations, on a lineplot, for a year
+
+    Args:
+        df (data frame) - weather data
+        metric (string) - choose a metric in the weather data: TMAX, TMIN, or TAVG
+        ylim_low (integer) - the lowest range on the y-axis plot
+        ylim_high (integer) - the higher range on the y-axis plot
+
+    Returns:
+        p (figure) - plot of the temperature comparison for a year
+    """
+
+    assert df.TMAX.min() > ylim_low
+    assert df.TMAX.max() < ylim_high
+
+    p = plt.figure(figsize=(15, 5))
+    p = sns.boxenplot(data=df, x="month", y="TMAX", linewidth=1.5)
+    p = plt.title("\nDaily %s Temperatures\n" % metric, fontsize=20)
+    p = plt.xlabel(" ", fontsize=15)
+    p = plt.xticks(
+        ticks=np.arange(0, 12),
+        fontsize=15,
+        labels=[
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ],
+    )
+    p = plt.ylabel("\n%s Temperature (°F)\n" % metric, fontsize=15)
+    p = plt.ylim(ylim_low, ylim_high)
+    p = plt.show()
+    return p
