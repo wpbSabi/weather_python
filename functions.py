@@ -188,3 +188,46 @@ def plot_monthly_temp_plots(
     p = plt.ylim(ylim_low, ylim_high)
     p = plt.show()
     return p
+
+
+def ideal_tmax(df: pd.DataFrame, ideal_min: int, ideal_max: int) -> pd.DataFrame:
+    """
+    If we defined ideal weather as days where the high temperature is between X and Y degrees,
+        then how many days per year of this ideal high temperature happen per location?
+
+    Displays the number of days per year where the maximum temperature is between ideal_min and ideal_max.
+
+    Args:
+        df (DataFrame): DataFrame containing temperature data with columns 'TMAX_PDX' and 'TMAX_CLATSKANIE'.
+        ideal_min (int): Minimum temperature for ideal weather.
+        ideal_max (int): Maximum temperature for ideal weather.
+    Returns:
+        DataFrame: A DataFrame with the number of ideal weather days per year for both locations
+        and the difference in counts.
+    """
+    ideal_weather1 = df[
+        (df[df.columns[3]] >= ideal_min) & (df[df.columns[3]] <= ideal_max)
+    ]
+    ideal_weather1 = ideal_weather1.groupby(["year"], as_index=False).agg(
+        {df.columns[3]: "count"}
+    )
+
+    ideal_weather2 = df[
+        (df[df.columns[9]] >= ideal_min) & (df[df.columns[9]] <= ideal_max)
+    ]
+    ideal_weather2 = ideal_weather2.groupby(["year"], as_index=False).agg(
+        {df.columns[9]: "count"}
+    )
+
+    # Merge the two ideal weather dataframes
+    ideal_weather = ideal_weather1.merge(
+        ideal_weather2,
+        on="year",
+        how="inner",
+        # suffixes=('_PDX', '_CLATSKANIE')
+    )
+    ideal_weather["difference"] = (
+        ideal_weather[df.columns[9]] - ideal_weather[df.columns[3]]
+    )
+
+    return ideal_weather.sort_values(by="year", ascending=False)
