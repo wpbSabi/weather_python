@@ -294,7 +294,7 @@ def tmin_plot(df: pd.DataFrame) -> pd.DataFrame:
     return p, tmin
 
 
-def usda_plant_hardiness_zone(df: pd.DataFrame) -> pd.DataFrame:
+def usda_plant_hardiness_zone(df: pd.DataFrame, legend_location: str) -> pd.DataFrame:
     """
     A USDA plant hardiness zone is defined by the minimum annual temperature at a station, averaged over the last 30 years.  For example, by this metric:
         * USDA Zone 8a falls within 10°F and 15°F
@@ -303,6 +303,7 @@ def usda_plant_hardiness_zone(df: pd.DataFrame) -> pd.DataFrame:
 
     Args:
         df (DataFrame): DataFrame containing TMIN temperature data
+        legend_location (string): Allows input fto change where the legend is located
     Returns:
         p (plot): plot of USDA plant hardiness zones for each station, over time
     """
@@ -362,6 +363,7 @@ def usda_plant_hardiness_zone(df: pd.DataFrame) -> pd.DataFrame:
     p.text(year_label, 18, "8b", color="black", fontsize=14, va="center")
     p.text(year_label, 23, "9a", color="black", fontsize=14, va="center")
     p.text(year_label, 28, "9b", color="black", fontsize=14, va="center")
+    p.text(year_label, 33, "10a", color="black", fontsize=14, va="center")
 
     plt.title("\nUSDA Hardiness Zone by Year\n")
     plt.ylim(-20, 35)
@@ -386,5 +388,5 @@ def usda_plant_hardiness_zone(df: pd.DataFrame) -> pd.DataFrame:
     p.set_ylabel(
         "\n30-year-Average-Minimum Temperature (°F)\n", fontsize=12, rotation=90
     )
-    # plt.legend(loc='center left', bbox_to_anchor=(1, 1))
+    plt.legend(list(df.columns[-n:]), loc=legend_location)
     return plt.show()
