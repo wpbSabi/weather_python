@@ -42,5 +42,8 @@ Gardening is the inspiration for this repo.  I'm planning to move my garden more
 
 The USDA Plant Hardiness Zones are calculated using minimum annual temperatures over a 30 year period, averaged.  You may explore and download maps created with that data from 2023 at [planthardiness.ars.usda.gov/](https://planthardiness.ars.usda.gov/).  
 
-Using temperature data in this github repository, we can also see changes over time.
-![USDA_Zones](https://github.com/wpbSabi/weather_python/blob/main/images/usda_hardiness_zone_pdx_clatskanie.png)
+First, we can see the minimum temperature for each year by location.
+![TMIN](https://github.com/wpbSabi/weather_python/blob/main/images/tmin.png)
+
+And then, we can calcualtion the hardiness zones over a rolling average of 30 years. 
+![USDA_Zones](https://github.com/wpbSabi/weather_python/blob/main/images/usda_hardiness_zone.png)
