@@ -223,7 +223,7 @@ def ideal_tmax(
         "Number of Days per Year (%i°F to %i°F)" % (ideal_min_limit, ideal_max_limit)
     )
     p = plt.title(
-        "\nNumber of Great Weather Days (%i°F to %i°F) \n"
+        "\nNumber of Great Weather Days (Max Temp from %i°F to %i°F) \n"
         % (ideal_min_limit, ideal_max_limit)
     )
     p = plt.legend(loc="lower left")

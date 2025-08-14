@@ -41,10 +41,20 @@ Gardening is the inspiration for this repo.  I'm planning to move my garden more
 
 ### Temperature
 
+#### Maximum Temperature
+
+First let's look at the maximum temperatures between two locations for a year.
+![TMAX_COMPARE](https://github.com/wpbSabi/weather_python/blob/main/images/tmax_compare.png)
+
+And then, let's count the number of "Great Days" where the maximum temperature is in between my favorite range.  The range is a parameter so we can experiment with other ranges too.
+![TMAX_GREAT_DAYS](https://github.com/wpbSabi/weather_python/blob/main/images/tmax_great_days.png)
+
+#### Minimum Temperature
+
 The USDA Plant Hardiness Zones are calculated using minimum annual temperatures over a 30 year period, averaged.  You may explore and download maps created with that data from 2023 at [planthardiness.ars.usda.gov/](https://planthardiness.ars.usda.gov/).  
 
 First, we can see the minimum temperature for each year by location.
 ![TMIN](https://github.com/wpbSabi/weather_python/blob/main/images/tmin.png)
 
-And then, we can calcualtion the hardiness zones over a rolling average of 30 years. 
+And then, we can calculation the hardiness zones over a rolling average of 30 years. 
 ![USDA_Zones](https://github.com/wpbSabi/weather_python/blob/main/images/usda_hardiness_zone.png)
