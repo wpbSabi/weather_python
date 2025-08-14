@@ -188,3 +188,45 @@ def plot_monthly_temp_plots(
     p = plt.ylim(ylim_low, ylim_high)
     p = plt.show()
     return p
+
+
+def ideal_tmax(
+    df: pd.DataFrame, ideal_min_limit: int, ideal_max_limit: int
+) -> pd.DataFrame:
+    """
+    If we defined ideal weather as days where the high temperature is between X and Y degrees,
+        then how many days per year of this ideal high temperature happen per location?
+
+    Displays the number of days per year where the maximum temperature is between ideal_min and ideal_max.
+
+    Args:
+        df (DataFrame): DataFrame containing temperature data with columns 'TMAX_PDX' and 'TMAX_CLATSKANIE'.
+        ideal_min_limit (int): Minimum temperature for ideal weather.
+        ideal_max_limit (int): Maximum temperature for ideal weather.
+    Returns:
+        DataFrame: A DataFrame with the number of ideal weather days per year for both locations
+        and the difference in counts.
+    """
+    ideal_weather1 = df[
+        (df["TMAX"] >= ideal_min_limit) & (df["TMAX"] <= ideal_max_limit)
+    ]
+    ideal_weather2 = ideal_weather1.groupby(["NAME", "year"], as_index=False).agg(
+        {"DATE": "count"}
+    )
+    ideal_weather2 = ideal_weather2.rename(columns={"DATE": "ideal_days"})
+
+    # Prepare data for seaborn barplot
+    p = plt.figure(figsize=(10, 6))
+    p = sns.barplot(data=ideal_weather2, x="year", y="ideal_days", hue="NAME")
+    p = plt.xlabel("Year")
+    p = plt.ylabel(
+        "Number of Days per Year (%i°F to %i°F)" % (ideal_min_limit, ideal_max_limit)
+    )
+    p = plt.title(
+        "\nNumber of Great Weather Days (%i°F to %i°F) \n"
+        % (ideal_min_limit, ideal_max_limit)
+    )
+    p = plt.legend(loc="lower left")
+    p = plt.tight_layout()
+    p = plt.show()
+    return p
