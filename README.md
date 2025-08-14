@@ -2,7 +2,7 @@
 
     .
     ├── data                    # Data files are CSV since that ensures easy github reability; the data files are not large, so CSV are okay for this repository- and can be easily read on github
-    ├── data                    # Images saved from the notebooks to use in this README
+    ├── images                    # Images saved from the notebooks to use in this README
     ├── notebooks               # The analyses are conducted and results are shown in the notebooks 
     ├── LICENSE
     ├── README.md
