@@ -230,3 +230,161 @@ def ideal_tmax(
     p = plt.tight_layout()
     p = plt.show()
     return p
+
+
+def tmin_plot(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    A USDA plant hardiness zone is defined by the minimum annual temperature at a station, averaged over the last 30 years.  For example, by this metric:
+        * USDA Zone 8a falls within 10°F and 15°F
+        * USDA Zone 8b falls within 15°F and 20°F
+        * USDA Zone 9a falls within 20°F and 25°F
+
+    Args:
+        df (DataFrame): DataFrame containing TMIN temperature data
+    Returns:
+        p (plot): plot of TMIN for each station, over time
+        tmin (DataFrame): data to use dor the USDA plant hardiness zones plot
+    """
+    # Pivot df to see the minimum temperature by year for each station
+    tmin = df.pivot_table(
+        index="year", columns="NAME", values="TMIN", aggfunc="min"
+    ).reset_index()
+
+    # Calculate the USDA hardiness zone for each station and year for all columns except the first (year)
+    for col in tmin.columns[1:]:
+        zone_col = f"{col.replace('TMIN_', '').replace('_', ' ')} Hardiness Zone"
+        tmin[zone_col] = tmin[col].rolling(window=30, min_periods=30).mean()
+
+    # Store the number of stations
+    n = len(df["STATION"].unique())
+    # Create a list of the column names for all_locations
+    all_locations = list(tmin.columns[1 : n + 1])
+
+    # Make the wide format long, for the seaborn lineplot
+    tmin_long = tmin.reset_index().melt(
+        id_vars="year", value_vars=all_locations, var_name="station", value_name="tmin"
+    )
+
+    # Create the plot
+    sns.set_theme(style="whitegrid")
+    # sns.set_theme(style="darkgrid")
+    # plt.style.use('dark_background')
+    p = plt.figure(figsize=(15, 5))
+    p = sns.lineplot(
+        data=tmin_long,
+        x="year",
+        y="tmin",
+        hue="station",
+        #  palette=['green', 'orange', 'blue'],
+        marker="o",
+        markersize=5,
+        linewidth=2,
+        style="station",
+        dashes=False,
+        #  legend='full',
+    )
+    p = plt.title("\nMinimum Temperature by Year and Station\n")
+    p = plt.ylim(-30, 60)
+    p = plt.xlabel("\nYear", fontsize=12, rotation=0)
+    p = plt.ylabel("\nMinimum Temperature per Year (°F)\n", fontsize=12, rotation=90)
+    p = plt.legend(loc="center left", bbox_to_anchor=(0, 0.9))
+    # Suppress printouts
+    p = plt.show()
+
+    return p, tmin
+
+
+def usda_plant_hardiness_zone(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    A USDA plant hardiness zone is defined by the minimum annual temperature at a station, averaged over the last 30 years.  For example, by this metric:
+        * USDA Zone 8a falls within 10°F and 15°F
+        * USDA Zone 8b falls within 15°F and 20°F
+        * USDA Zone 9a falls within 20°F and 25°F
+
+    Args:
+        df (DataFrame): DataFrame containing TMIN temperature data
+    Returns:
+        p (plot): plot of USDA plant hardiness zones for each station, over time
+    """
+    # Count the number of stations
+    n = int((len(df.columns) - 1) / 2)
+
+    # Make the wide format long, for the seaborn lineplot
+    usdahz = (
+        df.reset_index()
+        .melt(
+            id_vars="year",
+            value_vars=list(df.columns[n + 1 :]),
+            var_name="station",
+            value_name="USDA Hardiness Zone",
+        )
+        .dropna()
+    )
+    sns.set_theme(style="whitegrid")
+
+    p = plt.figure(figsize=(15, 5))
+    p = sns.lineplot(
+        data=usdahz,
+        x="year",
+        y="USDA Hardiness Zone",
+        hue="station",
+        #  palette=['green', 'blue', 'orange'],
+        marker="o",
+        markersize=5,
+        linewidth=2,
+        style="station",
+        dashes=False,
+    )
+
+    # Superimpose colored bands for USDA zones
+    # https://colorbrewer2.org/#type=sequential&scheme=YlOrBr&n=3
+    p.axhspan(-20, -15, color="purple", alpha=0.15, label="Zone 5a (-20 to -15°F)")
+    p.axhspan(-15, -10, color="blue", alpha=0.15, label="Zone 5b (-15 to -10°F)")
+    p.axhspan(-10, -5, color="#006400", alpha=0.15, label="Zone 6a (-10 to -5°F)")
+    p.axhspan(-5, 0, color="green", alpha=0.15, label="Zone 6b (-5 to 0°F)")
+    p.axhspan(0, 5, color="#8bc34a", alpha=0.15, label="Zone 7a (0 to 5°F)")
+    p.axhspan(5, 10, color="#b7efb2", alpha=0.15, label="Zone 7b (5 to 10°F)")
+    p.axhspan(10, 15, color="#fff7bc", alpha=0.15, label="Zone 8a (10 to 15°F)")
+    p.axhspan(15, 20, color="#fec44f", alpha=0.15, label="Zone 8b (15 to 20°F)")
+    p.axhspan(20, 25, color="#d95f0e", alpha=0.15, label="Zone 9a (20 to 25°F)")
+    p.axhspan(25, 30, color="#d95f0e", alpha=0.15, label="Zone 9b (25 to 30°F)")
+    p.axhspan(30, 35, color="orange", alpha=0.15, label="Zone 10a (30 to 35°F)")
+
+    # Add zone labels
+    year_label = 2024
+    p.text(x=year_label, y=-17, s="5a", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=-12, s="5b", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=-7, s="6a", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=-2, s="6b", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=3, s="7a", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=8, s="7b", color="black", fontsize=14, va="center")
+    p.text(x=year_label, y=13, s="8a", color="black", fontsize=14, va="center")
+    p.text(year_label, 18, "8b", color="black", fontsize=14, va="center")
+    p.text(year_label, 23, "9a", color="black", fontsize=14, va="center")
+    p.text(year_label, 28, "9b", color="black", fontsize=14, va="center")
+
+    plt.title("\nUSDA Hardiness Zone by Year\n")
+    plt.ylim(-20, 35)
+    p.set_yticks(np.arange(-20, 36, 5))
+    p.set_yticklabels(
+        [
+            "-20°F",
+            "-15°F",
+            "-10°F",
+            "5°F",
+            "0°F",
+            "5°F",
+            "10°F",
+            "15°F",
+            "20°F",
+            "25°F",
+            "30°F",
+            "35°F",
+        ]
+    )
+    p.set_xlabel("\nYear", fontsize=12, rotation=0)
+    p.set_ylabel(
+        "\n30-year-Average-Minimum Temperature (°F)\n", fontsize=12, rotation=90
+    )
+    # plt.legend(loc='center left', bbox_to_anchor=(1, 1))
+    return plt.show()
