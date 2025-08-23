@@ -56,5 +56,5 @@ The USDA Plant Hardiness Zones are calculated using minimum annual temperatures 
 First, we can see the minimum temperature for each year by location.
 ![TMIN](https://github.com/wpbSabi/weather_python/blob/main/images/tmin.png)
 
-And then, we can calculation the hardiness zones over a rolling average of 30 years. 
+And then, we can calculate the hardiness zones over a rolling average of 30 years. 
 ![USDA_Zones](https://github.com/wpbSabi/weather_python/blob/main/images/usda_hardiness_zone.png)
