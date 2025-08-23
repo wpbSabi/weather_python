@@ -214,6 +214,11 @@ def ideal_tmax(
         {"DATE": "count"}
     )
     ideal_weather2 = ideal_weather2.rename(columns={"DATE": "ideal_days"})
+    ideal_weather_avg = (
+        ideal_weather2.groupby("NAME")
+        .agg({"ideal_days": "mean"})
+        .sort_values("ideal_days", ascending=False)
+    )
 
     # Prepare data for seaborn barplot
     p = plt.figure(figsize=(10, 6))
@@ -229,7 +234,7 @@ def ideal_tmax(
     p = plt.legend(loc="lower left")
     p = plt.tight_layout()
     p = plt.show()
-    return p
+    return p, ideal_weather_avg
 
 
 def tmin_annual_plot(df: pd.DataFrame) -> pd.DataFrame:
