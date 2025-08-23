@@ -232,12 +232,9 @@ def ideal_tmax(
     return p
 
 
-def tmin_plot(df: pd.DataFrame) -> pd.DataFrame:
+def tmin_annual_plot(df: pd.DataFrame) -> pd.DataFrame:
     """
-    A USDA plant hardiness zone is defined by the minimum annual temperature at a station, averaged over the last 30 years.  For example, by this metric:
-        * USDA Zone 8a falls within 10°F and 15°F
-        * USDA Zone 8b falls within 15°F and 20°F
-        * USDA Zone 9a falls within 20°F and 25°F
+    Plots the minimum TMIN temperature per year per station
 
     Args:
         df (DataFrame): DataFrame containing TMIN temperature data
@@ -339,17 +336,17 @@ def usda_plant_hardiness_zone(df: pd.DataFrame, legend_location: str) -> pd.Data
 
     # Superimpose colored bands for USDA zones
     # https://colorbrewer2.org/#type=sequential&scheme=YlOrBr&n=3
-    p.axhspan(-20, -15, color="purple", alpha=0.15, label="Zone 5a (-20 to -15°F)")
-    p.axhspan(-15, -10, color="blue", alpha=0.15, label="Zone 5b (-15 to -10°F)")
-    p.axhspan(-10, -5, color="#006400", alpha=0.15, label="Zone 6a (-10 to -5°F)")
-    p.axhspan(-5, 0, color="green", alpha=0.15, label="Zone 6b (-5 to 0°F)")
-    p.axhspan(0, 5, color="#8bc34a", alpha=0.15, label="Zone 7a (0 to 5°F)")
-    p.axhspan(5, 10, color="#b7efb2", alpha=0.15, label="Zone 7b (5 to 10°F)")
-    p.axhspan(10, 15, color="#fff7bc", alpha=0.15, label="Zone 8a (10 to 15°F)")
-    p.axhspan(15, 20, color="#fec44f", alpha=0.15, label="Zone 8b (15 to 20°F)")
-    p.axhspan(20, 25, color="#d95f0e", alpha=0.15, label="Zone 9a (20 to 25°F)")
-    p.axhspan(25, 30, color="#d95f0e", alpha=0.15, label="Zone 9b (25 to 30°F)")
-    p.axhspan(30, 35, color="orange", alpha=0.15, label="Zone 10a (30 to 35°F)")
+    p.axhspan(-20, -15, color="#9ecae1", alpha=0.15, label="Zone 5a (-20 to -15°F)")
+    p.axhspan(-15, -10, color="#3182bd", alpha=0.15, label="Zone 5b (-15 to -10°F)")
+    p.axhspan(-10, -5, color="#c2e699", alpha=0.15, label="Zone 6a (-10 to -5°F)")
+    p.axhspan(-5, 0, color="#78c679", alpha=0.15, label="Zone 6b (-5 to 0°F)")
+    p.axhspan(0, 5, color="#31a354", alpha=0.15, label="Zone 7a (0 to 5°F)")
+    p.axhspan(5, 10, color="#006837", alpha=0.15, label="Zone 7b (5 to 10°F)")
+    p.axhspan(10, 15, color="#fef0d9", alpha=0.15, label="Zone 8a (10 to 15°F)")
+    p.axhspan(15, 20, color="#fdcc8a", alpha=0.15, label="Zone 8b (15 to 20°F)")
+    p.axhspan(20, 25, color="#fc8d59", alpha=0.15, label="Zone 9a (20 to 25°F)")
+    p.axhspan(25, 30, color="#e34a33", alpha=0.15, label="Zone 9b (25 to 30°F)")
+    p.axhspan(30, 35, color="#b30000", alpha=0.15, label="Zone 10a (30 to 35°F)")
 
     # Add zone labels
     year_label = 2024
