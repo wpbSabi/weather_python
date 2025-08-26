@@ -19,23 +19,15 @@
 Gardening is the inspiration for this repo.  I'm planning to move my garden more than an hour away, in a different micro climate, and I want to explore the differences.  Rather than ad hoc analyses, this time I'd like to build out standardized analyses that others could also reuse when importing data for different locations.
 
 ## How to run
-1. Gather data
+1. Gather data and save the data in the data folder
 - For US postal codes, go to [NOAA](https://www.ncdc.noaa.gov/cdo-web/search)
 - Read more about this data at [climate.gov](https://www.climate.gov/maps-data/dataset/past-weather-zip-code-data-table)
 - Read my tutorial at [medium's Towards Data Science archive](https://towardsdatascience.com/democratizing-historical-weather-data-with-r-cc3c76dde7c5/)
 
-2. Navigate to the `notebooks` folder and open `exploratory_data_analysis.ipynb`
-- Append new data to existing locations' data file
-- Explore the date ranges of each weather station in the data
-- Explore the weather stations on a map
-
-3. `compare_temperature.ipynb`
-- Pick two locations to compare along the same date range
-- Plot maximum temperature 
-- Plot minimum temperatur
-
-4. `compare_rainfall_across_locations.ipynb`
-- WIP
+2. Navigate to the `notebooks` folder for some prepared analyses
+- Open `exploratory_data_analysis.ipynb` for some initial data exploration and wrangling.  For example, explore the date ranges of each weather station in the data and display the weather stations on a map.
+- Compare temperature data`compare_temperature.ipynb`
+- (WIP) Compare precipitation data `compare_rainfall_across_locations.ipynb`
 
 ## Highlights
 
@@ -51,10 +43,13 @@ And then, let's count the number of "Great Days" where the maximum temperature i
 
 #### Minimum Temperature
 
-The USDA Plant Hardiness Zones are calculated using minimum annual temperatures over a 30 year period, averaged.  You may explore and download maps created with that data from 2023 at [planthardiness.ars.usda.gov/](https://planthardiness.ars.usda.gov/).  
+The USDA Plant Hardiness Zones are calculated using minimum annual temperatures over a 30 year period, averaged.  You may explore and download maps created with that data from 2023 at [planthardiness.ars.usda.gov/](https://planthardiness.ars.usda.gov/).
 
-First, we can see the minimum temperature for each year by location.
+You may also download the shapefiles and create your own maps from [PRISM](https://prism.oregonstate.edu/), as long as you provide credit to Oregon State University and the USDA like this:
+![usda_plant_hardiness_map](https://github.com/wpbSabi/weather_python/blob/main/images/usda_plant_hardiness_zones_map_with_highways.png)
+
+The map is a good reference, but it is also helpful to see the yearly variation of minimum temperature for each year by location:
 ![TMIN](https://github.com/wpbSabi/weather_python/blob/main/images/tmin.png)
 
-And then, we can calculate the hardiness zones over a rolling average of 30 years. 
+And then, we can calculate the hardiness zones over a rolling average of 30 years. PRISM updated their maps in 2023, and previously in 2012, but you may perform the most up-to-date calculations if you have the data:
 ![USDA_Zones](https://github.com/wpbSabi/weather_python/blob/main/images/usda_hardiness_zone.png)
