@@ -200,7 +200,7 @@ def ideal_tmax(
     Displays the number of days per year where the maximum temperature is between ideal_min and ideal_max.
 
     Args:
-        df (DataFrame): DataFrame containing temperature data with columns 'TMAX_PDX' and 'TMAX_CLATSKANIE'.
+        df (DataFrame): DataFrame containing temperature data with columns for TMAX at different locations.
         ideal_min_limit (int): Minimum temperature for ideal weather.
         ideal_max_limit (int): Maximum temperature for ideal weather.
     Returns:
