@@ -190,8 +190,8 @@ def plot_monthly_temp_plots(
     return p
 
 
-def ideal_tmax(
-    df: pd.DataFrame, ideal_min_limit: int, ideal_max_limit: int
+def ideal_temp(
+    df: pd.DataFrame, tmin_or_tmax: str, ideal_min_limit: int, ideal_max_limit: int
 ) -> pd.DataFrame:
     """
     If we defined ideal weather as days where the high temperature is between X and Y degrees,
@@ -200,7 +200,7 @@ def ideal_tmax(
     Displays the number of days per year where the maximum temperature is between ideal_min and ideal_max.
 
     Args:
-        df (DataFrame): DataFrame containing temperature data with columns for TMAX at different locations.
+        df (DataFrame): DataFrame containing temperature data with columns for TMAX or TMIN at different locations.
         ideal_min_limit (int): Minimum temperature for ideal weather.
         ideal_max_limit (int): Maximum temperature for ideal weather.
     Returns:
@@ -208,7 +208,7 @@ def ideal_tmax(
         and the difference in counts.
     """
     ideal_weather1 = df[
-        (df["TMAX"] >= ideal_min_limit) & (df["TMAX"] <= ideal_max_limit)
+        (df[tmin_or_tmax] >= ideal_min_limit) & (df[tmin_or_tmax] <= ideal_max_limit)
     ]
     ideal_weather2 = ideal_weather1.groupby(["NAME", "year"], as_index=False).agg(
         {"DATE": "count"}
@@ -228,8 +228,8 @@ def ideal_tmax(
         "Number of Days per Year (%i°F to %i°F)" % (ideal_min_limit, ideal_max_limit)
     )
     p = plt.title(
-        "\nNumber of Great Weather Days (Max Temp from %i°F to %i°F) \n"
-        % (ideal_min_limit, ideal_max_limit)
+        "\nNumber of Great Weather Days (%s from %i°F to %i°F) \n"
+        % (tmin_or_tmax, ideal_min_limit, ideal_max_limit)
     )
     p = plt.legend(loc="lower left")
     p = plt.tight_layout()
