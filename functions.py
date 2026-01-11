@@ -361,3 +361,49 @@ def usda_plant_hardiness_zone(df: pd.DataFrame, legend_location: str) -> pd.Data
     )
     plt.legend(list(df.columns[-n:]), loc=legend_location)
     return plt.show()
+
+
+def non_ideal_temp_days(df, tmin_threshold, tmax_threshold):
+    """
+    Calculate the average annual number of non-ideal temperature days for each location.
+
+    Args:
+        df (pd.DataFrame): DataFrame with temperature data
+        tmin_threshold (float): Maximum temperature threshold for too cold days
+        tmax_threshold (float): Minimum temperature threshold for too hot days
+
+    Returns:
+        pd.DataFrame: DataFrame with average annual non-ideal temperature days for each location.
+    """
+    # too_cold
+    too_cold = df[(df["TMIN"] <= tmin_threshold)]
+    too_cold_yearly = too_cold.groupby(["NAME", "year"], as_index=False).agg(
+        {"DATE": "count"}
+    )
+    too_cold_yearly_avg = too_cold_yearly.groupby(["NAME"], as_index=False).agg(
+        {"DATE": "mean"}
+    )
+    too_cold_yearly_avg = too_cold_yearly_avg.rename(
+        columns={"DATE": "avg_days_too_cold"}
+    )
+
+    # too_hot
+    too_hot = df[df["TMAX"] >= tmax_threshold]
+    too_hot_yearly = too_hot.groupby(["NAME", "year"], as_index=False).agg(
+        {"DATE": "count"}
+    )
+    too_hot_yearly_avg = too_hot_yearly.groupby(["NAME"], as_index=False).agg(
+        {"DATE": "mean"}
+    )
+    too_hot_yearly_avg = too_hot_yearly_avg.rename(columns={"DATE": "avg_days_too_hot"})
+
+    too = too_cold_yearly_avg.merge(
+        too_hot_yearly_avg,
+        on=["NAME"],
+        how="inner",
+    )
+    too["avg_days_too_cold"] = round(too["avg_days_too_cold"], 0).astype(int)
+    too["avg_days_too_hot"] = round(too["avg_days_too_hot"], 0).astype(int)
+    too["non_ideal_days"] = too["avg_days_too_cold"] + too["avg_days_too_hot"]
+
+    return too.sort_values(by="non_ideal_days")
