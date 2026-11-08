@@ -11,9 +11,12 @@
     └── pyproject.toml          # poetry file for package version management
 
 
-## Repository Setup
-- [poetry](https://python-poetry.org/) is used for package dependency management
+## Data usage
+- When sharing USDA plant hardiness zone data, add the USDA logo and Oregon State University log per the data sharing agreement
+- https://prism.oregonstate.edu/phzm/
 
+## Repository setup and other notes
+- [poetry](https://python-poetry.org/) is used for package dependency management
 
 ## Background
 Gardening is the inspiration for this repo.  I'm planning to move my garden more than an hour away, in a different micro climate, and I want to explore the differences.  Rather than ad hoc analyses, this time I'd like to build out standardized analyses that others could also reuse when importing data for different locations.
